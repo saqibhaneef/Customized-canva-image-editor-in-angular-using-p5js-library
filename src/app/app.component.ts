@@ -1,5 +1,6 @@
 import { Component, ViewChild } from '@angular/core';
-import { FabricjsEditorComponent } from 'projects/angular-editor-fabric-js/src/public-api';
+import { FabricjsEditorComponent } from './angular-editor-fabric-js/public-api';
+
 
 @Component({
   selector: 'app-root',
@@ -7,10 +8,16 @@ import { FabricjsEditorComponent } from 'projects/angular-editor-fabric-js/src/p
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent {
-  title = 'angular-editor-fabric-js';
+  title = 'fabric-editor-custom';
   isDrawMode=true;
 
-  @ViewChild('canvas', { static: false }) canvas: FabricjsEditorComponent;
+  @ViewChild('canvas', { static: false }) canvas: FabricjsEditorComponent;  
+
+  ngOnInit(): void {
+    this.activeClass();
+    
+  }
+  
 
   public rasterize() {
     this.canvas.rasterize();
@@ -23,13 +30,16 @@ export class AppComponent {
   public saveCanvasToJSON() {
     this.canvas.saveCanvasToJSON();
   }
+  public saveAsBase64() {
+    this.canvas.saveCanvasToBase64();
+  }
 
   public loadCanvasFromJSON() {
     this.canvas.loadCanvasFromJSON();
   }
 
   public confirmClear() {
-    this.canvas.confirmClear();
+    this.canvas.confirmClear();  
   }
 
   public changeSize() {
@@ -40,23 +50,23 @@ export class AppComponent {
     this.canvas.addText();
   }
 
-  public getImgPolaroid(event) {
+  public getImgPolaroid(event:any) {
     this.canvas.getImgPolaroid(event);
   }
 
-  public addImageOnCanvas(url) {
+  public addImageOnCanvas(url:any) {
     this.canvas.addImageOnCanvas(url);
   }
 
-  public readUrl(event) {
+  public readUrl(event:any) {
     this.canvas.readUrl(event);
   }
 
-  public removeWhite(url) {
+  public removeWhite(url:any) {
     this.canvas.removeWhite(url);
   }
 
-  public addFigure(figure) {
+  public addFigure(figure:any) {
     this.canvas.addFigure(figure);
   }
 
@@ -104,7 +114,7 @@ export class AppComponent {
     this.canvas.setFontFamily();
   }
 
-  public setTextAlign(value) {
+  public setTextAlign(value:any) {
     this.canvas.setTextAlign(value);
   }
 
@@ -116,11 +126,11 @@ export class AppComponent {
     this.canvas.setFontStyle();
   }
 
-  public hasTextDecoration(value) {
+  public hasTextDecoration(value:any) {
     this.canvas.hasTextDecoration(value);
   }
 
-  public setTextDecoration(value) {
+  public setTextDecoration(value:any) {
     this.canvas.setTextDecoration(value);
   }
 
@@ -128,7 +138,6 @@ export class AppComponent {
     this.canvas.setFontSize();
   }
   public setDrawSize() {
-    debugger
     this.canvas.setDrawSize();
   }
 
@@ -151,9 +160,26 @@ export class AppComponent {
     this.isDrawMode=this.canvas.drawingMode();
   }
 
-  public eraserMode() {    
-    this.isDrawMode=this.canvas.drawingMode();
+  public enableDrawMode() {    
+    this.isDrawMode=this.canvas.enableDrawingMode();
   }
+  public disableDrawMode() {    
+    this.isDrawMode=this.canvas.disableDrawingMode();
+  }  
 
-
+  activeClass()
+  {
+    var header = document.getElementById("CustomCard");
+    if(header!=null){
+       var btns = header.getElementsByClassName("btnMenuCustom");
+       for (var i = 0; i < btns.length; i++) {
+            btns[i].addEventListener("click", function() {
+             var current = document.getElementsByClassName("active");
+             current[0].className = current[0].className.replace("active", "");
+             this.className += " active";
+            });
+        }
+    }
+  }
+  
 }

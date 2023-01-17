@@ -1,9 +1,9 @@
-import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
-
-import { AppComponent } from './app.component';
-import { FabricjsEditorModule } from 'projects/angular-editor-fabric-js/src/public-api';
+import { BrowserModule } from '@angular/platform-browser';
 import { FormsModule } from '@angular/forms';
+import { AppRoutingModule } from './app-routing.module';
+import { AppComponent } from './app.component';
+import { FabricjsEditorModule } from './angular-editor-fabric-js/public-api';
 import { ColorPickerModule } from 'ngx-color-picker';
 
 @NgModule({
@@ -12,6 +12,7 @@ import { ColorPickerModule } from 'ngx-color-picker';
   ],
   imports: [
     BrowserModule,
+    AppRoutingModule,
     FabricjsEditorModule,
     FormsModule,
     ColorPickerModule
