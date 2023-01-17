@@ -27,13 +27,15 @@ export class FabricjsEditorComponent implements AfterViewInit {
     TextDecoration: '',
     drawSize:'2',
     brushColor:'black',
+    backgroundDefaultImage:'/assets/images/doctor2.jpg',
+    backgroundImage:'/assets/images/doctor2.jpg'
   };
 
   public textString: string;
   public url: string | ArrayBuffer = '';
   public size: any = {
-    width: 612,
-    height: 367
+    width: 1100,
+    height: 600
   };
 
   public json: any;
@@ -69,7 +71,7 @@ export class FabricjsEditorComponent implements AfterViewInit {
       this.resetPanels();
 
       if (selectedObject.type !== 'group' && selectedObject) {
-
+        debugger
         this.getId();
         this.getOpacity();
 
@@ -120,12 +122,27 @@ export class FabricjsEditorComponent implements AfterViewInit {
 
   /*------------------------Block elements------------------------*/
 
-  setCanvaBackgroundImage()
+  addBackgroundImage(url)
   {
-    this.canvas.setBackgroundImage('/assets/images/doctor2.jpg', this.canvas.renderAll.bind(this.canvas), {
-      width: this.size.width,
-      height: this.size.height,            
+    if(url){
+      this.props.backgroundImage=url
+      this.setCanvaBackgroundImage();
+    }
+  }
+
+
+  setCanvaBackgroundImage()
+  {    
+    var backgrounImage='/assets/images/doctor.png'
+    var backgrounImage2='/assets/images/doctor2.jpg'
+    
+    var bImage=fabric.Image.fromURL(this.props.backgroundImage,(img)=>{
+      this.canvas.setBackgroundImage(img, this.canvas.renderAll.bind(this.canvas), {     
+        scaleX: this.size.width / img.width,
+        scaleY: this.size.height / img.height                                       
+      });
     });    
+    
   }
 
   // Block "Size"
@@ -155,7 +172,9 @@ export class FabricjsEditorComponent implements AfterViewInit {
   // Block "Add text"
 
   addText() {
+    this.textString="New Text"
     if (this.textString) {
+      
       const text = new fabric.IText(this.textString, {
         left: 10,
         top: 10,
@@ -221,7 +240,8 @@ export class FabricjsEditorComponent implements AfterViewInit {
     if (event.target.files && event.target.files[0]) {
       const reader = new FileReader();
       reader.onload = (readerEvent) => {
-        this.url = readerEvent.target.result;
+        this.url = readerEvent.target.result;  
+        this.addBackgroundImage(this.url);
       };
       reader.readAsDataURL(event.target.files[0]);
     }
@@ -258,8 +278,7 @@ export class FabricjsEditorComponent implements AfterViewInit {
           radius: 50, left: 10, top: 10, fill: '#ff5722'
         });
         break;
-    }
-    add.set('erasable', true);
+    }    
     this.extend(add, this.randomId());
     this.canvas.add(add);
     this.selectItemAfterAdded(add);
@@ -272,13 +291,15 @@ export class FabricjsEditorComponent implements AfterViewInit {
   }
 
   selectItemAfterAdded(obj) {
-    this.canvas.discardActiveObject().renderAll();
-    this.canvas.setActiveObject(obj);
+    this.cleanSelect();
+    this.canvas.isDrawingMode=false
+    this.canvas.setActiveObject(obj).renderAll();    
   }
 
   setCanvasFill() {
     //if (!this.props.canvasImage) {
       //this.canvas.backgroundColor = this.props.canvasFill;
+      this.props.backgroundImage=this.props.backgroundDefaultImage
       this.setCanvaBackgroundImage();
       this.canvas.renderAll();
     //}
@@ -608,7 +629,7 @@ export class FabricjsEditorComponent implements AfterViewInit {
 
   confirmClear() {
     if (confirm('Are you sure?')) {      
-      this.canvas.clear();
+      this.canvas.clear();      
       this.props.canvasFill='#ffffff'
       this.setCanvasFill();
     }
@@ -696,10 +717,12 @@ export class FabricjsEditorComponent implements AfterViewInit {
   drawingMode(){    
     return this.canvas.isDrawingMode = !this.canvas.isDrawingMode;        
   }
-  enableDrawingMode(){    
+  enableDrawingMode(){  
+    this.cleanSelect();  
     return this.canvas.isDrawingMode = true;        
   }
-  disableDrawingMode(){    
+  disableDrawingMode(){
+    this.cleanSelect();    
     return this.canvas.isDrawingMode = false;        
   }
 

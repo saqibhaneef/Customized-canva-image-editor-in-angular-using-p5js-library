@@ -59,7 +59,7 @@ export class AppComponent {
   }
 
   public readUrl(event:any) {
-    this.canvas.readUrl(event);
+    this.canvas.readUrl(event);    
   }
 
   public removeWhite(url:any) {
@@ -166,6 +166,10 @@ export class AppComponent {
   public disableDrawMode() {    
     this.isDrawMode=this.canvas.disableDrawingMode();
   }  
+
+  public addBackgroundImage(url:any) {
+    this.canvas.addBackgroundImage(url);
+  }
 
   activeClass()
   {
